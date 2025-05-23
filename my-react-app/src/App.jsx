@@ -9,6 +9,7 @@ import Exam4 from "./components/Exam4";
 import Exam5 from "./components/Exam5";
 import Exam6 from "./components/Exam6";
 import Exam7 from "./components/Exam7";
+import TodoList from "./components/TodoList";
 
 function App() {
   // 상태(state)
@@ -31,7 +32,8 @@ function App() {
     // </>
     // <Exam3 />
     // <Exam4 />
-    <Exam7 />
+    // <Exam7 />
+    <TodoList />
   );
 }
 
