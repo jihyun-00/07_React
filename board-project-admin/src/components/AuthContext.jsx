@@ -60,15 +60,6 @@ export const AuthProvider = ({children}) => {
     localStorage.setItem("userData", JSON.stringify(adminInfo));
     // -> user는 상태이므로 넣으면 안됨 -> 비동기 형식으로 상태가 변경됨
 
-    // 만료시간 지정 (1시간 뒤에 로그아웃) 타이머 설정
-    setTimeout(()=>{
-        // 1시간이 지나면 localStorage에 있는 데이터 삭제
-        localStorage.removeItem("userData")
-        setUser(null);
-        alert("재로그인 해주세요.");
-        window.location.href="/";
-    }, 60*60*1000); // 1시간 후
-    
     // 쿠키, localStorage, sessionStorage
     
     // 브라우저에서 현재 로그인한 관리자의 정보를 기억하도록 해야함
@@ -81,7 +72,33 @@ export const AuthProvider = ({children}) => {
     // - 브라우저 탭 또는 창을 닫으면 데이터가 즉시 삭제
     // - 현재 탭 또는 창에서만 데이터 유지
     // - 유효기간 만료 기능 없음
-    
+
+
+    // 만료시간 지정 (1시간 뒤에 로그아웃) 타이머 설정
+    setTimeout(()=>{
+        // 1시간이 지나면 localStorage에 있는 데이터 삭제
+        localStorage.removeItem("userData")
+        setUser(null);
+        alert("재로그인 해주세요.");
+        window.location.href="/";
+    }, 60*60*1000); // 1시간 후
+};
+
+// 로그아웃 처리 함수
+const handleLogout = async() => {
+    try{
+        const resp = await axios.get("http://localhost/admin/logout");
+
+        console.log(resp);
+
+        if(resp.status == 200) {
+            localStorage.removeItem("userData");
+            setUser(null);
+        }
+
+    }catch(error) {
+        console.log("로그아웃 중 문제발생 : ", error)
+    }
 };
 
 // 자식(하위) 컴포넌트에게 전달할 데이터를 하나로 묶기
@@ -90,6 +107,7 @@ const globalState = {
     changeInputEmail,
     changeInputPw,
     handleLogin,
+    handleLogout
 };
 return (
     <AuthContext.Provider value={globalState}>
